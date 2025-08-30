@@ -120,27 +120,33 @@ def calc_detection_probability(
 
     env_width = 0.66 * numax**0.88
 
-    if coordinate is None:
-        noise = calc_noise(
-            magnitude,
-            teff=teff,
-            exptime=cadence,
-        )
-    else:
-        ecl = coordinate.geocentrictrueecliptic
-        gal = coordinate.galactic
-        noise = calc_noise(
-            magnitude,
-            teff=teff,
-            exptime=cadence,
-            e_lng=ecl.lon.value,
-            e_lat=ecl.lat.value,
-            g_lng=gal.l.value,
-            g_lat=gal.b.value,
-        )
+    # if coordinate is None:
+    #     noise = calc_noise(
+    #         magnitude,
+    #         teff=teff,
+    #         exptime=cadence,
+    #     )
+    # else:
+    #     ecl = coordinate.geocentrictrueecliptic
+    #     gal = coordinate.galactic
+    #     noise = calc_noise(
+    #         magnitude,
+    #         teff=teff,
+    #         exptime=cadence,
+    #         e_lng=ecl.lon.value,
+    #         e_lat=ecl.lat.value,
+    #         g_lng=gal.l.value,
+    #         g_lat=gal.b.value,
+    #     )
+
+    # a much simpler ET noise model, for now
+    noise = calc_noise(
+        magnitude,
+        cadence,
+    )
     noise = noise * 10.0**6  # total noise in units of ppm
-    if cadence == 20:
-        noise = noise * inter(magnitude)
+    # if cadence == 20:
+    #     noise = noise * inter(magnitude)
 
     # call the function for the real and aliased components (above and below VNYQ) of the granulation
     # the order of the stars is different for the aliases so fun the function in a loop
